@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Bom Amigo | Inhambane</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;600;700&family=Yellowtail&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-principal: #0A0A0A;
+            --bg-card: #141414;
+            --vermelho: #E31B23;
+            --dourado: #FFD700;
+            --branco: #FFFFFF;
+            --cinza: #B0B0B0;
+            --header-glass: rgba(10, 10, 10, 0.9);
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        /* Configurações Globais */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body {
+            background: var(--bg-principal);
+            color: var(--branco);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; }
+        .fancy { font-family: 'Yellowtail', cursive; color: var(--dourado); text-transform: none; }
+
+        /* Animação Fade Up */
+        .reveal { opacity: 0; transform: translateY(30px); transition: var(--transition); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Header */
+        header {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            padding: 20px 5%; background: var(--header-glass);
+            display: flex; justify-content: space-between; align-items: center;
+            backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .logo { font-size: 1.8rem; font-family: 'Bebas Neue'; color: var(--vermelho); }
+        .nav-links { display: flex; gap: 25px; list-style: none; }
+        .nav-links a { color: var(--branco); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
+        .nav-links a:hover { color: var(--vermelho); }
+
+        /* Hero Section */
+        #hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=1920') center/cover;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px;
+        }
+        #hero h1 { font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 10px; line-height: 1; }
+        #hero p { font-size: 1.2rem; color: var(--cinza); margin-bottom: 30px; }
+
+        .btn-main {
+            padding: 15px 40px; background: var(--vermelho); color: white; border: none;
+            font-family: 'Bebas Neue'; font-size: 1.2rem; cursor: pointer; transition: var(--transition);
+            text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn-main:hover { transform: scale(1.05); background: #b3151b; box-shadow: 0 0 20px rgba(227, 27, 35, 0.4); }
+
+        /* Sections General */
+        section { padding: 100px 5%; }
+        .section-title { text-align: center; font-size: 3rem; margin-bottom: 50px; }
+        .section-title span { display: block; font-size: 1.2rem; margin-top: -10px; }
+
+        /* Grid de Quartos e Restaurante */
+        .grid-container {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;
+        }
+        .card {
+            background: var(--bg-card); border-radius: 4px; overflow: hidden;
+            border-bottom: 3px solid transparent; transition: var(--transition);
+        }
+        .card:hover { border-color: var(--vermelho); transform: translateY(-10px); }
+        .card img { width: 100%; height: 250px; object-fit: cover; }
+        .card-info { padding: 20px; }
+        .card-price { color: var(--dourado); font-weight: bold; font-size: 1.3rem; margin-top: 10px; }
+
+        /* Painel Admin Oculto */
+        #admin-panel {
+            position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100vh;
+            background: #111; z-index: 2000; padding: 40px 20px; transition: 0.5s ease-in-out;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.5); overflow-y: auto;
+        }
+        #admin-panel.active { right: 0; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        input, select, textarea {
+            width: 100%; padding: 12px; margin: 10px 0; background: #222; border: 1px solid #333; color: white;
+        }
+
+        /* Footer */
+        footer { padding: 50px 5%; background: #050505; border-top: 1px solid #111; text-align: center; }
+        .xtack-signature { margin-top: 20px; font-size: 0.8rem; letter-spacing: 2px; color: #444; cursor: pointer; }
+
+        /* Responsividade Xiaomi Redmi 9T */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .section-title { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">HOTEL BOM AMIGO</div>
+        <ul class="nav-links">
+            <li><a href="#hero">Início</a></li>
+            <li><a href="#quartos">Acomodações</a></li>
+            <li><a href="#restaurante">Restaurante</a></li>
+            <li><a href="#reserva">Reservas</a></li>
+        </ul>
+        <a href="#reserva" class="btn-main" style="padding: 10px 20px; font-size: 1rem;">RESERVAR</a>
+    </header>
+
+    <section id="hero">
+        <h1 class="reveal">LUXO & CONFORTO <br><span class="fancy">em Inhambane</span></h1>
+        <p class="reveal">Experiências exclusivas no coração de Moçambique.</p>
+        <a href="#quartos" class="btn-main reveal">VER ACOMODAÇÕES <i class="fas fa-chevron-down"></i></a>
+    </section>
+
+    <section id="quartos">
+        <h2 class="section-title reveal">Acomodações <span>Conforto Premium</span></h2>
+        <div class="grid-container" id="rooms-grid">
+            </div>
+    </section>
+
+    <section id="restaurante" style="background: #0f0f0f;">
+        <h2 class="section-title reveal">Gastronomia <span class="fancy">Bom Gosto Gourmet</span></h2>
+        <div class="grid-container" id="menu-grid">
+            </div>
+    </section>
+
+    <section id="reserva">
+        <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+            <h2 class="section-title reveal">Faça sua Reserva</h2>
+            <form id="reservation-form" class="reveal">
+                <input type="text" placeholder="Seu Nome" required>
+                <select id="tipo-reserva">
+                    <option value="Quarto">Reserva de Quarto</option>
+                    <option value="Mesa">Reserva de Mesa (Restaurante)</option>
+                </select>
+                <input type="date" required>
+                <button type="submit" class="btn-main" style="width: 100%; justify-content: center; margin-top: 20px;">
+                    ENVIAR VIA WHATSAPP <i class="fab fa-whatsapp"></i>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Hotel Bom Amigo - Inhambane. Todos os direitos reservados.</p>
+        <div class="xtack-signature" id="admin-trigger">✦ DESENVOLVIDO POR XTACK OFICIAL ✦</div>
+    </footer>
+
+    <div id="admin-panel">
+        <div class="admin-header">
+            <h3>PAINEL XTACK CORE</h3>
+            <button onclick="toggleAdmin()" style="background:none; border:none; color:white; font-size:1.5rem; cursor:pointer;">&times;</button>
+        </div>
+        <div id="login-area">
+            <input type="password" id="admin-pass" placeholder="Senha do Sistema">
+            <button onclick="checkAdmin()" class="btn-main" style="width:100%;">ACESSAR</button>
+        </div>
+        <div id="admin-content" style="display: none;">
+            <h4>Gerir Itens (Quartos/Pratos)</h4>
+            <input type="text" id="item-name" placeholder="Nome do Item">
+            <input type="text" id="item-price" placeholder="Preço (Ex: 2.500 MT)">
+            <select id="item-type">
+                <option value="room">Quarto</option>
+                <option value="food">Restaurante</option>
+            </select>
+            <button onclick="addItem()" class="btn-main" style="width:100%; background: var(--dourado); color: black;">ADICIONAR ITEM</button>
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #333;">
+            <button onclick="clearData()" style="color: gray; background: none; border: none; cursor: pointer;">Limpar Todos os Dados</button>
+        </div>
+    </div>
+
+    <script>
+        // Dados Iniciais (Mock)
+        let data = JSON.parse(localStorage.getItem('hotel_data')) || {
+            rooms: [
+                { name: 'Suíte Presidencial', price: '7.500 MT', img: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&q=80&w=600' },
+                { name: 'Quarto Executivo', price: '4.200 MT', img: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&q=80&w=600' }
+            ],
+            menu: [
+                { name: 'Lagosta Grelhada', price: '1.850 MT', img: 'https://images.unsplash.com/photo-1553243772-0a9121c95563?auto=format&fit=crop&q=80&w=600' }
+            ]
+        };
+
+        // Renderização
+        function render() {
+            const roomsGrid = document.getElementById('rooms-grid');
+            const menuGrid = document.getElementById('menu-grid');
+            
+            roomsGrid.innerHTML = data.rooms.map(item => `
+                <div class="card reveal">
+                    <img src="${item.img}" alt="${item.name}">
+                    <div class="card-info">
+                        <h3>${item.name}</h3>
+                        <p class="card-price">${item.price}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            menuGrid.innerHTML = data.menu.map(item => `
+                <div class="card reveal">
+                    <img src="${item.img}" alt="${item.name}">
+                    <div class="card-info">
+                        <h3>${item.name}</h3>
+                        <p class="card-price">${item.price}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Sistema Admin Oculto (XTACK Core)
+        let clickCount = 0;
+        document.getElementById('admin-trigger').addEventListener('click', () => {
+            clickCount++;
+            if(clickCount >= 5) { toggleAdmin(); clickCount = 0; }
+        });
+
+        function toggleAdmin() {
+            document.getElementById('admin-panel').classList.toggle('active');
+        }
+
+        function checkAdmin() {
+            const pass = document.getElementById('admin-pass').value;
+            if(pass === 'bomamigo2026') {
+                document.getElementById('login-area').style.display = 'none';
+                document.getElementById('admin-content').style.display = 'block';
+            } else {
+                alert('Acesso Negado');
+            }
+        }
+
+        function addItem() {
+            const name = document.getElementById('item-name').value;
+            const price = document.getElementById('item-price').value;
+            const type = document.getElementById('item-type').value;
+            const defaultImg = 'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&q=80&w=600';
+
+            if(type === 'room') data.rooms.push({name, price, img: defaultImg});
+            else data.menu.push({name, price, img: defaultImg});
+
+            localStorage.setItem('hotel_data', JSON.stringify(data));
+            render();
+            alert('Item adicionado com sucesso!');
+        }
+
+        function clearData() {
+            if(confirm('Deseja resetar o site?')) {
+                localStorage.removeItem('hotel_data');
+                location.reload();
+            }
+        }
+
+        // WhatsApp Integration
+        document.getElementById('reservation-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const tipo = document.getElementById('tipo-reserva').value;
+            const msg = `Olá Hotel Bom Amigo, gostaria de solicitar uma reserva de ${tipo}.`;
+            window.open(`https://wa.me/258850268545?text=${encodeURIComponent(msg)}`);
+        });
+
+        // Intersection Observer para animações
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        window.onload = () => {
+            render();
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        };
+    </script>
+</body>
+</html>
